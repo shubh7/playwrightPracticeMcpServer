@@ -27,7 +27,26 @@ This project is enabled for Playwright Model Context Protocol (MCP) server integ
 - Integrate with cloud-based test execution platforms
 - Enable advanced debugging and inspection features
 
-To start the MCP server, refer to the Playwright documentation or your custom scripts. Ensure your pipeline and local environment are configured for MCP if you require remote or distributed test execution.
+### How to Enable MCP Server in VS Code
+1. Open your workspace in VS Code.
+2. Go to `.vscode/settings.json` (create the file if it doesn't exist).
+3. Add the following configuration:
+   ```json
+   {
+     "chat.mcp.enabled": true,
+     "mcp": {
+       "servers": {
+         "playwright": {
+           "command": "npx",
+           "args": ["@playwright/mcp@latest"]
+         }
+       }
+     }
+   }
+   ```
+4. Save the file. The MCP server will now be enabled for your workspace, allowing advanced Playwright features and remote control.
+
+To start the MCP server manually or for more advanced usage, refer to the Playwright documentation or your custom scripts. Ensure your pipeline and local environment are configured for MCP if you require remote or distributed test execution.
 
 ## Getting Started
 1. Install dependencies: `pnpm install`
