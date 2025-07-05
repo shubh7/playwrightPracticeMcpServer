@@ -1,0 +1,52 @@
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '^20.9.0'
+  displayName: 'Install Node.js'
+
+- script: |
+    echo "Killing any existing Chrome instances..."
+    pkill chrome || true
+    pkill -f chromium || true
+  displayName: "Cleanup Existing Chrome Instances"
+  
+- script: |
+    echo "Checking if artifact directory exists..."
+    if [ -d "/playwright-report/index.html" ]; then
+      echo "Directory exists. Cleaning up existing artifacts..."
+      rm -rf /playwright-report/index.html*
+    else
+      echo "Artifact directory does not exist. Nothing to clean."
+    fi
+  displayName: 'Clean Artifact Directory Before Test'
+  continueOnError: true  # Ensures the pipeline doesn't fail if something goes wrong
+
+
+
+- script: |
+    echo Run functional test
+    pwd
+    npm install -g pnpm
+    pnpm install
+    npx playwright install-deps chromium
+    pnpm exec playwright install
+    npx playwright --version
+    KEY=${{ parameters.EXECUTION_ENVIRONMENT }} WORKER_COUNT=$(WORKER_COUNT) TAG_NAME=${{ parameters.TAG_NAME }} TESTRAIL=$(TESTRAIL_INT) TESTRAILRUNID=$(TESTRAIL_RUNID) pnpm run regression_chromium
+  displayName: 'npm install and run automation suite'
+  continueOnError: true
+
+# - publish: 'playwright-report/index.html'
+#   displayName: 'Publish script'
+#   artifact: playwright_execution_results_$(Build.BuildId)
+
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFiles: 'results.xml'  # Point to the JUnit report file
+    testResultsFormat: 'JUnit'
+    failTaskOnFailedTests: true
+  displayName: 'Publish Automation execution Report'

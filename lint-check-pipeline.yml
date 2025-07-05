@@ -1,0 +1,21 @@
+trigger: none  # Prevents this from running on every push
+
+pr:  
+  branches:
+    include:
+      - main
+
+jobs:
+  - job: LintCheck
+    displayName: "Lint Check on PR"
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - script: |
+          echo installing pnpm
+          npm install -g pnpm
+          echo installing dependancies
+          pnpm install
+          echo running lint checks
+          pnpm run lint
+        displayName: "Run Lint Check"

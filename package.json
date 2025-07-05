@@ -1,0 +1,52 @@
+{
+  "name": "practice-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "single-script": "pnpm run lint && cross-env KEY=test pnpm exec playwright test --workers 2 --headed --max-failures=5 --grep @test --trace on --project=chromium",
+    "regression_chromium": "pnpm run lint && pnpm exec playwright test --workers $WORKER_COUNT --max-failures=5 --grep $TAG_NAME --trace on --project=chromium --retries=3",
+    "regression_chrome": "pnpm run lint && pnpm exec playwright test --workers $WORKER_COUNT --max-failures=5 --grep $TAG_NAME --trace on --project=chrome",
+    "show-trace": "npx playwright show-trace C:\\Users\\{userName}\\Downloads\\{tracefileName}.zip",
+    "eslint": "eslint tests --ext .ts",
+    "eslint-fix": "eslint tests --fix --ext .ts",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "sonar": "node sonar-scanner.js",
+    "sonar-local": "node sonar-scanner-local.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^20.8.10",
+    "@types/superagent": "^8.1.9",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "allure-commandline": "^2.24.0",
+    "allure-playwright": "^2.8.1",
+    "csv-parse": "^5.5.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsdoc": "^50.6.2",
+    "eslint-plugin-playwright": "^2.2.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "luxon": "^3.4.3",
+    "mkdirp": "^3.0.1",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.1",
+    "sonarqube-scanner": "^3.3.0",
+    "superagent": "^10.1.1"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "pdf-parse": "^1.1.1"
+  }
+}
